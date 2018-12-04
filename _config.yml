@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://lp-github.github.io
+url: https://ServiceComputingGroup.github.io
 date_format: "ordinal"
 title: 小组博客
 subtitle: "golang从入门到放弃"
