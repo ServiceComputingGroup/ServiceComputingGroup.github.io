@@ -22,7 +22,7 @@ keywords: GraphQL,SimpleWebServer
    >mkdir D:\Code\ServiceComputingGroup\SWPI\Client\  
    cd D:\Code\ServiceComputingGroup\SWPI\Client\  
    git clone https://github.com/ServiceComputingGroup/SWPIClient.git  
-   cd SWPIClient
+   cd SWPIClient  
    npm install  
    npm run dev  
   
