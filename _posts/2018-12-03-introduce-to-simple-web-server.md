@@ -38,6 +38,8 @@ keywords: GraphQL,SimpleWebServer
 > http://localhost:8080
 
 出现客户端界面.
+![blockchain](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/
+u=702257389,1274025419&fm=27&gp=0.jpg "区块链")
 + api使用如下：
   + 当处于未登录状态时：只能执行用户的注册和登录
   + 当处于登录状态下：
