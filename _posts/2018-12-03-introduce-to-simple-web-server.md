@@ -55,22 +55,19 @@ keywords: GraphQL,SimpleWebServer
           + 例如：
           
           >people/3 查询index为3的people
-          
           >people/?page=3 查询处于第三页的people，一共10个
-          
           >people/3/?page=3 查询index为3的people
-          
           >people/ 查询第一页的people
           
-      查询film：
-      films/index/?page=page#
+     + 查询film：
+        + films/index/?page=page#
           用法如people
-      查询planets：
-      planet/index/?page=page#
-      查询species：
-      species/index/?page=page#
-      查询starship
-      starships/index/?page=page#
-      查询vehicles：
-      vehicles/index/?page=page#
+     + 查询planets：
+        + planet/index/?page=page#
+     + 查询species：
+        + species/index/?page=page#
+     + 查询starship
+        + starships/index/?page=page#
+     + 查询vehicles：
+        + vehicles/index/?page=page#
     
