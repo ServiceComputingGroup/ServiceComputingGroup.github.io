@@ -56,11 +56,8 @@ keywords: GraphQL,SimpleWebServer
           + 例如：
           
           >people/3 查询index为3的people 
-          
-          >people/?page=3 查询处于第三页的people，一共10个</br>
-          
-          >people/3/?page=3 查询index为3的people</br>
-          
+          >people/?page=3 查询处于第三页的people，一共10个
+          >people/3/?page=3 查询index为3的people
           >people/ 查询第一页的people</br>
           
      + 查询film：
