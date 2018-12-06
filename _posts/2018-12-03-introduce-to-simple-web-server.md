@@ -43,6 +43,7 @@ keywords: GraphQL,SimpleWebServer
 
 在安装了前端和后端代码之后，打开浏览器，在地址栏输入：
 > http://localhost:8080
+
 出现客户端界面.
 + api使用如下：
   + 当处于未登录状态时：只能执行用户的注册和登录
