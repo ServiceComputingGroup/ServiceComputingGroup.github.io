@@ -38,7 +38,7 @@ keywords: GraphQL,SimpleWebServer
 > http://localhost:8080
 
 出现客户端界面.
-![初始界面](ServiceComputingGroup.github.io/images/posts/SWApi/apiRoot.PNG)
+![初始界面](https://github.com/ServiceComputingGroup/ServiceComputingGroup.github.io/blob/master/images/posts/SWApi/apiRoot.PNG)
 + api使用如下：
   + 当处于未登录状态时：只能执行用户的注册和登录
   + 当处于登录状态下：
