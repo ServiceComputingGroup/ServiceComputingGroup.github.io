@@ -19,25 +19,18 @@ keywords: GraphQL,SimpleWebServer
 
 + 前端：
 
-  + mkdir D:\Code\ServiceComputingGroup\SWPI\Client\
-  
-  + cd D:\Code\ServiceComputingGroup\SWPI\Client\
-  
-  + git clone https://github.com/ServiceComputingGroup/SWPIClient.git
-  
-  + npm install
-  
-  + npm run dev
+   >mkdir D:\Code\ServiceComputingGroup\SWPI\Client\  
+   cd D:\Code\ServiceComputingGroup\SWPI\Client\  
+   git clone https://github.com/ServiceComputingGroup/SWPIClient.git  
+   npm install  
+   npm run dev  
   
 + 后端：
 
-  + go get github.com/ServiceComputingGroup/simpleWebServer
-  
-  + cd %GOPATH%/src/github.com/ServiceComputingGroup/simpleWebServer
-    
-  + go install
-  
-  + simpleWebServer
+  >go get github.com/ServiceComputingGroup/simpleWebServer  
+  cd %GOPATH%/src/github.com/ServiceComputingGroup/simpleWebServer  
+  go install  
+  simpleWebServer  
   
 # 项目使用：
 
