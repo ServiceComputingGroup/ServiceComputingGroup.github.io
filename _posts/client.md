@@ -1,0 +1,230 @@
+---
+layout: post
+title: 项目小结-杨芮
+categories: Simplewebserver
+description: 基于 Vue.js 仿照 SWAPI 网站进行前端开发
+keywords: Vue,SimpleWebServer
+---
+
+# 模仿swapi的前端开发
+
+## 项目简介
+本项目是基于 VUE.js 的手脚架 vue-cli 项目，前端模仿 [SWAPI](https://swapi.co/) 网站界面，增加了用户注册，用户登录，登出，修改用户信息的功能。客户端的 github 地址是：[SWPIClient](https://github.com/ServiceComputingGroup/SWPIClient)
+
+## 开发环境
+- VUE.js 框架
+- npm 6.4.1
+
+## 开发过程
+### Vue.js 的数据绑定
+拿主页面来说，当用户输入点击 request 发送一个请求给服务器，服务器会返回 json 数据，我们需要在主页面的浏览框里需要显示服务器返回的数据。Vue.js 提供了很方便的数据动态绑定功能。只要在组件中定义一个 data 属性定义一个自定义的数据叫做 text。然后在标签 pre 中间插入 `{{text}}`，只要text的值改变，相应的在标签里的内容也会改变，从而实现数据绑定。
+
+```html
+<pre id="interactive_output" class="pre-scrollable">{{text}}</pre>
+```
+``` js
+export default {
+    data() {
+        return {
+                text:"",
+        };
+    },
+}
+```
+
+初始的时候，可以看到 swapi 网站的预览中是有值的，所以将那些数据先保存在本地，在页面初始化的时候加载，并且赋值给text，这样一开始预览中会显示出一些样例值。
+
+```js
+var json = require('../data.json');
+this.$data.text = json;
+```
+
+另一种绑定的方式是使用 `v-model`，例如添加在 input 标签作为修饰符，给 v-model 赋值为 data 属性的一个自定义数据 username ，用户在 input 输入的值，会同时赋值给 username ，实现数据的双向绑定。
+
+```html
+<input v-model="username" v-verify="username" type="text" name="user" id="_user">
+```
+
+### Vue.js 的表单验证
+在用户注册和修改用户信息的时候总是需要进行表单验证，本次前端的表单验证是使用 vue 表单验证组件 `v-verify-plugin`，可以使用 npm 进行安装。使用该组件可以实现用户输入时候的动态验证，在 input 标签中加入 `v-verify` 可以赋值为 data 中的一个自定义数据。在 js 中使用如下的方式在组件中引入:
+
+``` js
+import verify from "vue-verify-plugin";
+ Vue.use(verify,{
+        blur:true
+    });
+export default {
+		data() {
+			return {
+				username:"",
+				phone: "",
+				email: "",
+				password:""
+			};
+		},
+		verify: {
+				username:[
+				"required",
+				{
+					minLength:4,
+					message: "用户名不得小于4位"
+				},
+				{
+					maxLength:10,
+					message: "用户名不得大于10位"
+				}
+			],
+			phone:["required","mobile"],
+			email:["required","email"],
+			password: [
+				"required",
+				{
+					minLength:6,
+					message: "密码不得小于6位"
+				}]
+    },
+```
+
+上面的`blur:true`代表输入框失去焦点的时候，需要开启验证。可以看到 verufy 使用 `required` 定义该数据不能为空，它提供了一些默认的验证规则，如 `email`、`mobile`、`minLength`、`maxLength`等。这里的 `message` 代表如果对应属性验证错误的时候将会显示什么内容。可以在 label 中引入修饰符 `v-remind` ，在表单验证错误的时候会显示 `message` 的值。
+```html
+<label v-remind="username"></label>
+```
+在提交表单的时候通常需要检测表单是否通过规则来进行下一步的操作，可以使用 `this.$verify.check()` 来判断表单是否通过规则。用户也可以自定义自己的规则然后在 Vue 中引入，如 `Vue.use(verify,rules:myRules});`。
+
+### Vue.js 通过路由传值
+在一开始的时候我是使用路由传值的方式传递注册或登录的用户名，从而实现主页面在登录之后会动态显示登录用户名的名字。后来后端完善之后可以调用后端 api 来获取登录的用户名名字。我是通过在路由跳转的时候加入参数，将想要的值传递，然后在跳转后的另一端接收。
+
+``` js
+Regiser.vue
+this.$router.push({
+        path: '/', 
+        name: 'SWPI',
+        params: { 
+                username: this.username
+        },
+});
+
+SWPI.vue
+export default {
+    created: function () { 
+        this.getEventData();
+    },
+    methods: {
+        getEventData:function() {
+            let routerParams = this.$route.params.username; 
+        } 
+```
+在组件的 created 过程中调用函数，使用 `this.$route.params.username;`去获得另一个组件通过路由传过来的值
+
+### Vue.js 与 graphql
+因为后端使用了 graphql，所以前端也需要在 vue 项目中集成 graphql。需要搭配 Apollo 一起使用。
+
+```
+npm install --save vue-apollo graphql apollo-client apollo-link apollo-link-http apollo-cache-inmemory graphql-tag
+```
+
+然后在 main.js 引入，创建 `ApolloClient` 实例, 安装 `VueApollo` 插件
+
+```js
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import VueApollo from 'vue-apollo'
+
+const httpLink = new HttpLink({
+  // 后端接口地址
+  uri: 'http://localhost:9091/graphql',
+})
+
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+  connectToDevTools: true,
+})
+
+// Install the vue plugin
+Vue.use(VueApollo)
+const apolloProvider = new VueApollo({
+defaultClient: apolloClient,
+})
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  components: { App },
+  template: '<App/>',
+  provide: apolloProvider.provide(),//注册全局组件
+})
+```
+
+那怎样使用组件去查询请求服务器，可以新建一个 js 文件，在里面定义 `mutation` 或 `query` 语句，定义的语句形式可以在后端提供的可交互页面 `http://localhost:9091/graphql` 中进行测试。
+
+```js
+import gql from 'graphql-tag'
+export const LOGIN_MUTATION = gql `
+    mutation login($username: String!,$password: String!) {
+        login(
+            username: $username,
+            password: $password
+        ) 
+    }
+`
+export const QUERYUSER_QUERY = gql `
+    query queryuser($username: String!) {
+        queryuser(
+            username: $username
+        ) 
+    }
+`
+```
+
+然后在组件的 js 中引入，进行请求
+
+```js
+//引入
+import { REGISTER_MUTATION } from '../js/graphql.js';
+//下面是在 methods 中的部分代码
+this.$apollo.mutate({
+        mutation: REGISTER_MUTATION,
+        variables: {
+            username: this.$data.username,
+            phone: this.$data.phone,
+            email: this.$data.email,
+            password: this.$data.password,
+        }
+    })
+    .then(response => {
+        //console.log(response.data.register);
+        if(response.data.register == "")
+        {
+            alert("用户名已经被注册,请重新输入");
+        }
+        else
+        {
+            //.....
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+```
+
+使用 `this.$apollo.mutate` 发起 mutate 请求，使用 `this.$apollo.query` 发起 query 请求。在 `variables`中写向后端传送的参数，等待后端响应之后使用 `response.data`的方式获取后端返回的数据。
+
+### Vue.js 存储token
+为了保持用户的登录状态，后端会给前端的每一个用户发送一个 token ，token 具有时间期限。我使用 `localStorage` 创建一个本地存储的 name/value 对去存储 token。
+
+```js
+//设置
+window.localStorage.setItem('token', response.data.login);
+//获取
+window.localStorage.getItem('token')
+```
+
+## 总结
+通过本次的项目开发，熟悉了基本的 Vue.js 的使用，本次开发一直都是使用兄弟组件，没有对组件的概念有更深入的理解，熟悉了 graphql 的前端使用。
